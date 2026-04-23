@@ -119,8 +119,8 @@ jobs:
 
             sudo k3s kubectl apply -k k8s/
 
-            sudo k3s kubectl -n webapp set image deployment/backend backend=docker.io/${{ secrets.DOCKERHUB_USERNAME }}/linuxmint75-backend:${{ github.sha }}
-            sudo k3s kubectl -n webapp set image deployment/frontend frontend=docker.io/${{ secrets.DOCKERHUB_USERNAME }}/linuxmint75-frontend:${{ github.sha }}
+            sudo k3s kubectl -n webapp set image deployment/backend backend=docker.io/${{ secrets.DOCKERHUB_USERNAME }}/linuxmint75-backend:latest
+            sudo k3s kubectl -n webapp set image deployment/frontend frontend=docker.io/${{ secrets.DOCKERHUB_USERNAME }}/linuxmint75-frontend:latest
 
             sudo k3s kubectl -n webapp rollout status deployment/backend
             sudo k3s kubectl -n webapp rollout status deployment/frontend
