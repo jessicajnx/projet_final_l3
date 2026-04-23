@@ -100,7 +100,7 @@ Dans `Settings > Secrets and variables > Actions`, ajouter les secrets suivants:
 - `DOCKERHUB_TOKEN` - token d'authentification Docker Hub
 - `VM_HOST` - adresse IP/domaine de la VM
 - `VM_USER` - utilisateur SSH
-- `VM_SSH_KEY` - cle privee SSH
+- `VM_SSH_KEY` - contenu complet de la cle privee SSH au format PEM ou OpenSSH, avec les lignes `BEGIN` et `END` incluses. Ne pas mettre le chemin du fichier, ni la cle publique `.pub`
 - `POSTGRES_PASSWORD` - mot de passe base de donnees
 
 ## 7) Variables d'environnement et secrets
@@ -147,13 +147,4 @@ Le depot contient:
 - manifests Kubernetes
 - pipeline CI/CD
 - scripts VM/deploiement
-- README et rapport
-
-## 11) Rapport de projet
-
-Completer le fichier `REPORT.md` avec:
-- contexte
-- etapes realisees
-- captures d'ecran de preuve
-- erreurs et corrections
-
+- README

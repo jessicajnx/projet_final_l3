@@ -74,6 +74,20 @@ jobs:
     needs: docker
     if: github.ref == 'refs/heads/main'
     steps:
+      - name: Validate SSH secret format
+        env:
+          VM_SSH_KEY: ${{ secrets.VM_SSH_KEY }}
+        run: |
+          if [ -z "$VM_SSH_KEY" ]; then
+            echo "VM_SSH_KEY secret is missing"
+            exit 1
+          fi
+
+          if ! printf '%s' "$VM_SSH_KEY" | grep -qE '-----BEGIN (OPENSSH |RSA |EC |DSA )?PRIVATE KEY-----'; then
+            echo "VM_SSH_KEY does not look like a private key. Paste the full private key, not the public key or file path."
+            exit 1
+          fi
+
       - name: Deploy over SSH
         uses: appleboy/ssh-action@v1.2.0
         with:
