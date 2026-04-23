@@ -1,13 +1,5 @@
 # Projet DevOps - Deploiement automatise full stack
 
-Ce projet repond aux exigences du TP:
-- conteneurisation avec Docker
-- orchestration multi-services avec Docker Compose
-- deploiement Kubernetes sur VM cloud
-- pipeline CI/CD automatique avec GitHub Actions
-- gestion des variables d'environnement et des secrets
-- documentation technique complete
-
 ## 1) Architecture
 
 Services:
@@ -68,60 +60,17 @@ docker compose down
 - Orchestration:
   - `docker-compose.yml`
 
-## 5) Deploiement Kubernetes sur ta VM Azure
+## 5) Application en production
 
-VM fournie:
-- IP: `132.164.81.42`
-- Connexion SSH:
+L'application est deploiee et accessible en ligne sur:
 
-```bash
-ssh -i C:/Users/Jess/Downloads/efrei-jaunaux_key.pem azureuser@132.164.81.42
-```
+**URL publique:** http://132.164.81.42
 
-### 5.1 Installer les outils sur la VM
+Endpoints disponibles:
+- `/health` - statut de sante de l'application
+- `/api/message` - message depuis l'API
 
-Depuis la VM:
-
-```bash
-bash scripts/setup-vm.sh
-```
-
-### 5.2 Deployer l'application dans K3s
-
-Depuis la VM:
-
-```bash
-DOCKERHUB_USERNAME=linuxmint75 \
-POSTGRES_PASSWORD='<mot_de_passe_db>' \
-IMAGE_TAG=latest \
-bash scripts/deploy-k8s-vm.sh
-```
-
-### 5.3 Verification Kubernetes
-
-```bash
-sudo k3s kubectl -n webapp get pods -o wide
-sudo k3s kubectl -n webapp get svc
-```
-
-Application accessible depuis l'exterieur via:
-- http://132.164.81.42:30080
-
-## 5.bis) Demarrage rapide sur VM avec Docker Compose (acces public)
-
-Si Kubernetes est instable sur une petite VM, utiliser Docker Compose sur la VM:
-
-1. Se connecter en SSH a la VM
-2. Aller dans le dossier du projet
-3. Lancer:
-
-```bash
-sudo docker compose -f docker-compose.yml -f docker-compose.vm.yml up -d
-```
-
-Dans ce mode, le frontend est expose sur le port 80 de la VM:
-- http://132.164.81.42
-- http://132.164.81.42/health
+Pour consulter le statut, visiter: http://132.164.81.42/health
 
 ## 6) Pipeline CI/CD (GitHub Actions)
 
@@ -146,13 +95,13 @@ Flux implemente:
 
 ### Secrets GitHub a configurer
 
-Dans `Settings > Secrets and variables > Actions`:
-- `DOCKERHUB_USERNAME` (ex: linuxmint75)
-- `DOCKERHUB_TOKEN`
-- `VM_HOST` (132.164.81.42)
-- `VM_USER` (azureuser)
-- `VM_SSH_KEY` (contenu de la cle privee PEM)
-- `POSTGRES_PASSWORD`
+Dans `Settings > Secrets and variables > Actions`, ajouter les secrets suivants:
+- `DOCKERHUB_USERNAME` - identifiant Docker Hub
+- `DOCKERHUB_TOKEN` - token d'authentification Docker Hub
+- `VM_HOST` - adresse IP/domaine de la VM
+- `VM_USER` - utilisateur SSH
+- `VM_SSH_KEY` - cle privee SSH
+- `POSTGRES_PASSWORD` - mot de passe base de donnees
 
 ## 7) Variables d'environnement et secrets
 
