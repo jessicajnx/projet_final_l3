@@ -5,6 +5,13 @@ const db = require("./db");
 const app = express();
 app.use(express.json());
 
+app.get("/live", (_req, res) => {
+  res.status(200).json({
+    status: "ok",
+    service: "backend"
+  });
+});
+
 app.get("/health", async (_req, res) => {
   try {
     await db.query("SELECT 1");

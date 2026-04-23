@@ -54,7 +54,7 @@ spec:
                   key: API_MESSAGE
           livenessProbe:
             httpGet:
-              path: /health
+              path: /live
               port: 3000
             initialDelaySeconds: 10
             periodSeconds: 10
