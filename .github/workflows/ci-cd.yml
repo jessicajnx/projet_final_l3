@@ -98,7 +98,11 @@ jobs:
           passphrase: ${{ secrets.VM_SSH_PASSPHRASE }}
           script: |
             set -e
-            if [ ! -d "$HOME/projet_final_L3/.git" ]; then
+            if [ -d "$HOME/projet_final_L3/.git" ]; then
+              cd $HOME/projet_final_L3
+              git fetch origin
+            else
+              rm -rf $HOME/projet_final_L3
               git clone https://github.com/${{ github.repository }}.git $HOME/projet_final_L3
             fi
 
