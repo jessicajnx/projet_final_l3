@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DevOps TP - Frontend</title>
+    <style>
+      :root {
+        --bg: #f2efe8;
+        --surface: #fffdf7;
+        --ink: #1f2937;
+        --accent: #0f766e;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        color: var(--ink);
+        background:
+          radial-gradient(circle at 10% 10%, #d9f99d 0%, transparent 30%),
+          radial-gradient(circle at 90% 80%, #99f6e4 0%, transparent 35%),
+          var(--bg);
+        display: grid;
+        place-items: center;
+        padding: 24px;
+      }
+
+      main {
+        width: min(700px, 100%);
+        background: var(--surface);
+        border-radius: 16px;
+        box-shadow: 0 14px 40px rgba(31, 41, 55, 0.15);
+        padding: 28px;
+      }
+
+      h1 {
+        margin-top: 0;
+      }
+
+      .row {
+        margin-top: 16px;
+        padding: 14px;
+        border-left: 6px solid var(--accent);
+        background: #f8fafc;
+        border-radius: 8px;
+      }
+
+      .ok {
+        color: #166534;
+      }
+
+      .ko {
+        color: #b91c1c;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>TP DevOps - Frontend</h1>
+      <p>Cette page consomme une API backend via Docker Compose ou Kubernetes.</p>
+      <div class="row" id="health">Verification /health ...</div>
+      <div class="row" id="message">Chargement /api/message ...</div>
+    </main>
+
+    <script>
+      async function fetchJson(url) {
+        const response = await fetch(url);
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}`);
+        }
+        return response.json();
+      }
+
+      async function init() {
+        const healthEl = document.getElementById("health");
+        const messageEl = document.getElementById("message");
+
+        try {
+          const health = await fetchJson("/health");
+          healthEl.innerHTML = `<span class="ok">Backend: ${health.status}, DB: ${health.db}</span>`;
+        } catch (error) {
+          healthEl.innerHTML = `<span class="ko">Erreur /health: ${error.message}</span>`;
+        }
+
+        try {
+          const message = await fetchJson("/api/message");
+          messageEl.innerHTML = `<span class="ok">Message API: ${message.message}</span>`;
+        } catch (error) {
+          messageEl.innerHTML = `<span class="ko">Erreur /api/message: ${error.message}</span>`;
+        }
+      }
+
+      init();
+    </script>
+  </body>
+</html>
