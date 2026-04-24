@@ -3,13 +3,17 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>DevOps TP - Frontend</title>
+    <title>One Direction Archive</title>
     <style>
       :root {
-        --bg: #f2efe8;
-        --surface: #fffdf7;
+        --bg: #f4efe6;
+        --surface: rgba(255, 252, 246, 0.92);
+        --surface-strong: #fffaf0;
         --ink: #1f2937;
-        --accent: #0f766e;
+        --muted: #6b7280;
+        --accent: #b8860b;
+        --accent-2: #7c3aed;
+        --line: rgba(31, 41, 55, 0.12);
       }
 
       body {
@@ -18,8 +22,9 @@
         font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
         color: var(--ink);
         background:
-          radial-gradient(circle at 10% 10%, #d9f99d 0%, transparent 30%),
-          radial-gradient(circle at 90% 80%, #99f6e4 0%, transparent 35%),
+          radial-gradient(circle at 10% 10%, rgba(184, 134, 11, 0.22) 0%, transparent 28%),
+          radial-gradient(circle at 90% 20%, rgba(124, 58, 237, 0.18) 0%, transparent 22%),
+          radial-gradient(circle at 20% 80%, rgba(255, 223, 186, 0.32) 0%, transparent 24%),
           var(--bg);
         display: grid;
         place-items: center;
@@ -27,15 +32,127 @@
       }
 
       main {
-        width: min(700px, 100%);
+        width: min(1100px, 100%);
         background: var(--surface);
-        border-radius: 16px;
-        box-shadow: 0 14px 40px rgba(31, 41, 55, 0.15);
-        padding: 28px;
+        border: 1px solid var(--line);
+        border-radius: 28px;
+        box-shadow: 0 28px 80px rgba(31, 41, 55, 0.16);
+        overflow: hidden;
+        backdrop-filter: blur(12px);
+      }
+
+      .hero {
+        padding: 36px;
+        background:
+          linear-gradient(135deg, rgba(184, 134, 11, 0.18), rgba(124, 58, 237, 0.14)),
+          var(--surface-strong);
+        border-bottom: 1px solid var(--line);
+      }
+
+      .eyebrow {
+        text-transform: uppercase;
+        letter-spacing: 0.18em;
+        font-size: 0.8rem;
+        color: var(--accent-2);
+        margin: 0 0 12px;
+        font-weight: 700;
       }
 
       h1 {
-        margin-top: 0;
+        margin: 0;
+        font-size: clamp(2.2rem, 5vw, 4.5rem);
+        line-height: 0.95;
+      }
+
+      .subtitle {
+        max-width: 720px;
+        margin: 16px 0 0;
+        color: var(--muted);
+        font-size: 1.05rem;
+        line-height: 1.6;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(12, 1fr);
+        gap: 18px;
+        padding: 22px 36px 36px;
+      }
+
+      .card {
+        background: rgba(255, 255, 255, 0.7);
+        border: 1px solid var(--line);
+        border-radius: 22px;
+        padding: 20px;
+        box-shadow: 0 10px 30px rgba(31, 41, 55, 0.05);
+      }
+
+      .card h2 {
+        margin: 0 0 12px;
+        font-size: 1.1rem;
+      }
+
+      .card p {
+        margin: 0;
+        color: var(--muted);
+        line-height: 1.65;
+      }
+
+      .span-7 {
+        grid-column: span 7;
+      }
+
+      .span-5 {
+        grid-column: span 5;
+      }
+
+      .span-4 {
+        grid-column: span 4;
+      }
+
+      .span-6 {
+        grid-column: span 6;
+      }
+
+      .band-list {
+        display: grid;
+        gap: 12px;
+        margin-top: 12px;
+      }
+
+      .band-member {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 12px 14px;
+        border-radius: 16px;
+        background: rgba(255, 255, 255, 0.8);
+        border: 1px solid var(--line);
+      }
+
+      .badge {
+        font-size: 0.78rem;
+        padding: 6px 10px;
+        border-radius: 999px;
+        background: rgba(124, 58, 237, 0.12);
+        color: var(--accent-2);
+        font-weight: 700;
+      }
+
+      .timeline {
+        display: grid;
+        gap: 14px;
+      }
+
+      .timeline-item {
+        padding-left: 16px;
+        border-left: 3px solid var(--accent);
+      }
+
+      .timeline-item strong {
+        display: block;
+        margin-bottom: 6px;
       }
 
       .row {
@@ -43,7 +160,7 @@
         padding: 14px;
         border-left: 6px solid var(--accent);
         background: #f8fafc;
-        border-radius: 8px;
+        border-radius: 12px;
       }
 
       .ok {
@@ -53,14 +170,97 @@
       .ko {
         color: #b91c1c;
       }
+
+      .footer-note {
+        padding: 0 36px 30px;
+        color: var(--muted);
+        font-size: 0.92rem;
+      }
+
+      @media (max-width: 900px) {
+        .span-7,
+        .span-5,
+        .span-4,
+        .span-6 {
+          grid-column: span 12;
+        }
+
+        .hero,
+        .grid,
+        .footer-note {
+          padding-left: 20px;
+          padding-right: 20px;
+        }
+      }
     </style>
   </head>
   <body>
     <main>
-      <h1>TP DevOps - Frontend</h1>
-      <p>Cette page consomme une API backend via Docker Compose ou Kubernetes.</p>
-      <div class="row" id="health">Verification /health ...</div>
-      <div class="row" id="message">Chargement /api/message ...</div>
+      <section class="hero">
+        <p class="eyebrow">Fan site / archive</p>
+        <h1>One Direction</h1>
+        <p class="subtitle">
+          Une page hommage simple et originale autour du groupe, avec un style plus
+          chaleureux et plus "site fan". La partie technique reste connectee au
+          backend pour montrer que l'application fonctionne toujours correctement.
+        </p>
+      </section>
+
+      <section class="grid">
+        <article class="card span-7">
+          <h2>Pourquoi cette page ?</h2>
+          <p>
+            J'ai transforme l'accueil en mini site One Direction pour changer le theme
+            principal du projet. L'objectif est surtout visuel: une page plus vivante,
+            plus personnelle, mais qui garde les appels backend du TP.
+          </p>
+          <div class="row" id="health">Verification /health ...</div>
+          <div class="row" id="message">Chargement /api/message ...</div>
+        </article>
+
+        <article class="card span-5">
+          <h2>Le groupe en bref</h2>
+          <div class="band-list">
+            <div class="band-member"><span>Harry Styles</span><span class="badge">voix</span></div>
+            <div class="band-member"><span>Louis Tomlinson</span><span class="badge">energie</span></div>
+            <div class="band-member"><span>Niall Horan</span><span class="badge">guitare</span></div>
+            <div class="band-member"><span>Zayn Malik</span><span class="badge">style</span></div>
+            <div class="band-member"><span>Liam Payne</span><span class="badge">harmonie</span></div>
+          </div>
+        </article>
+
+        <article class="card span-6">
+          <h2>Ce que represente One Direction</h2>
+          <p>
+            Sans recopier de contenus officiels ni de paroles, cette section resume
+            l'esprit du groupe: pop, energie de scene, gros succes mondial et une base
+            de fans enorme. Le design essaye de donner une vibe nostalgique et douce.
+          </p>
+        </article>
+
+        <article class="card span-6">
+          <h2>Mini timeline</h2>
+          <div class="timeline">
+            <div class="timeline-item">
+              <strong>2010</strong>
+              Formation du groupe et debut de l'aventure.
+            </div>
+            <div class="timeline-item">
+              <strong>2011 - 2015</strong>
+              Epoque des grands albums, des tournees et du succes mondial.
+            </div>
+            <div class="timeline-item">
+              <strong>Aujourd'hui</strong>
+              Une page hommage propre, simple, et facile a faire evoluer.
+            </div>
+          </div>
+        </article>
+      </section>
+
+      <div class="footer-note">
+        Astuce pour les captures: prends le screen de la page complete en haut, puis
+        du bloc backend pour montrer que le site reste fonctionnel.
+      </div>
     </main>
 
     <script>
