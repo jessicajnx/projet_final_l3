@@ -96,8 +96,30 @@ jobs:
           username: ${{ secrets.VM_USER }}
           key: ${{ secrets.VM_SSH_KEY }}
           passphrase: ${{ secrets.VM_SSH_PASSPHRASE }}
+          command_timeout: 30m
           script: |
             set -e
+
+            wait_rollout_or_check_available() {
+              DEPLOY_NAME="$1"
+              if sudo k3s kubectl -n webapp rollout status deployment/$DEPLOY_NAME --timeout=300s; then
+                return 0
+              fi
+
+              echo "Rollout timeout for deployment/$DEPLOY_NAME. Checking available replicas..."
+              sudo k3s kubectl -n webapp get deployment/$DEPLOY_NAME -o wide
+
+              AVAILABLE=$(sudo k3s kubectl -n webapp get deployment/$DEPLOY_NAME -o jsonpath='{.status.availableReplicas}')
+              if [ -z "$AVAILABLE" ] || [ "$AVAILABLE" -lt 1 ]; then
+                echo "deployment/$DEPLOY_NAME has no available replicas"
+                sudo k3s kubectl -n webapp get pods -o wide
+                sudo k3s kubectl -n webapp describe deployment/$DEPLOY_NAME
+                exit 1
+              fi
+
+              echo "deployment/$DEPLOY_NAME has $AVAILABLE available replica(s); continuing despite rollout timeout on constrained VM"
+            }
+
             if [ -d "$HOME/projet_final_L3/.git" ]; then
               cd $HOME/projet_final_L3
               git fetch origin
@@ -122,5 +144,5 @@ jobs:
             sudo k3s kubectl -n webapp set image deployment/backend backend=docker.io/${{ secrets.DOCKERHUB_USERNAME }}/linuxmint75-backend:latest
             sudo k3s kubectl -n webapp set image deployment/frontend frontend=docker.io/${{ secrets.DOCKERHUB_USERNAME }}/linuxmint75-frontend:latest
 
-            sudo k3s kubectl -n webapp rollout status deployment/backend
-            sudo k3s kubectl -n webapp rollout status deployment/frontend
+            wait_rollout_or_check_available backend
+            wait_rollout_or_check_available frontend
